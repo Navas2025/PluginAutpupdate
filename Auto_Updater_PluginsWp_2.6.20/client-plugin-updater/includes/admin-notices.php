@@ -23,7 +23,7 @@ function plugin_updater_show_update_notice() {
 
     // No mostrar en las páginas del propio plugin
     $plugin_pages = array('client-plugin-updater', 'plugin-updater-plugins', 'plugin-updater-themes', 'plugin-updater-white-label');
-    if (isset($_GET['page']) && in_array($_GET['page'], $plugin_pages)) {
+    if (isset($_GET['page']) && in_array(sanitize_text_field($_GET['page']), $plugin_pages)) {
         return;
     }
 
@@ -64,11 +64,11 @@ function plugin_updater_show_update_notice() {
     // Construir mensaje
     $message_parts = array();
     if ($updates_info['plugins'] > 0) {
-        $message_parts[] = '<strong>' . $updates_info['plugins'] . '</strong> ' . 
+        $message_parts[] = '<strong>' . esc_html($updates_info['plugins']) . '</strong> ' . 
                           ($updates_info['plugins'] === 1 ? 'plugin' : 'plugins');
     }
     if ($updates_info['themes'] > 0) {
-        $message_parts[] = '<strong>' . $updates_info['themes'] . '</strong> ' . 
+        $message_parts[] = '<strong>' . esc_html($updates_info['themes']) . '</strong> ' . 
                           ($updates_info['themes'] === 1 ? 'tema' : 'temas');
     }
     
@@ -81,12 +81,12 @@ function plugin_updater_show_update_notice() {
             <strong>🔔 Tienes <?php echo $message; ?> disponible<?php echo $total_updates === 1 ? '' : 's'; ?> para actualizar en tu PluginAutoUpdate.</strong>
             <?php if ($updates_info['plugins'] > 0): ?>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=plugin-updater-plugins')); ?>" class="button button-primary" style="margin-left:10px;">
-                    Ver Plugins (<?php echo $updates_info['plugins']; ?>)
+                    Ver Plugins (<?php echo esc_html($updates_info['plugins']); ?>)
                 </a>
             <?php endif; ?>
             <?php if ($updates_info['themes'] > 0): ?>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=plugin-updater-themes')); ?>" class="button button-primary" style="margin-left:5px;">
-                    Ver Temas (<?php echo $updates_info['themes']; ?>)
+                    Ver Temas (<?php echo esc_html($updates_info['themes']); ?>)
                 </a>
             <?php endif; ?>
         </p>

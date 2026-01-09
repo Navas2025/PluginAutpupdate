@@ -78,7 +78,7 @@ function plugin_updater_show_update_notice() {
     ?>
     <div class="notice notice-warning is-dismissible plugin-updater-notice" data-notice="plugin-updater-updates">
         <p>
-            <strong>🔔 Tienes <?php echo $message; ?> disponible<?php echo $total_updates === 1 ? '' : 's'; ?> para actualizar en tu PluginAutoUpdate.</strong>
+            <strong>🔔 Tienes <?php echo wp_kses_post($message); ?> disponible<?php echo $total_updates === 1 ? '' : 's'; ?> para actualizar en tu PluginAutoUpdate.</strong>
             <?php if ($updates_info['plugins'] > 0): ?>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=plugin-updater-plugins')); ?>" class="button button-primary" style="margin-left:10px;">
                     Ver Plugins (<?php echo esc_html($updates_info['plugins']); ?>)
@@ -178,7 +178,7 @@ function plugin_updater_count_updates_from_cache($cached_updates) {
  * AJAX: Descartar aviso temporalmente (24 horas)
  */
 function plugin_updater_dismiss_notice_ajax() {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'plugin_updater_dismiss_notice')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['nonce']), 'plugin_updater_dismiss_notice')) {
         wp_send_json_error('Invalid nonce');
         return;
     }

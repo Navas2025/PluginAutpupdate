@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://actualizarplugins.online
- * @since             2.6.20
+ * @since             2.6.21
  * @package           Client_Plugin_Updater_GPLReposit
  *
  * @wordpress-plugin
  * Plugin Name:       API Key AutoUpdate GPLReposit
  * Plugin URI:        https://gplreposit.online
  * Description:       Plugin para activar API Keys y gestionar actualizaciones de plugins y temas - de la web GPLReposit
- * Version:           2.6.20
+ * Version:           2.6.21
  * Author:            Navas
  * Author URI:        https://gplreposit.online
  * License:           GPL-2.0+
@@ -37,6 +37,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/update-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/theme-update-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/ajax-handler.php'; // Añadir esta
+require_once plugin_dir_path(__FILE__) . 'includes/admin-notices.php';
 
 /**
  * Modificar el nombre y el autor del plugin que se muestra en la lista de plugins.

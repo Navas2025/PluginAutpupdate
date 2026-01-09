@@ -92,21 +92,24 @@ function plugin_updater_count_available_updates($remote_plugins) {
     $installed_plugins = get_plugins();
     $count = 0;
 
+    // Crear lookup array de plugins instalados por slug para mejor performance
+    $installed_by_slug = array();
+    foreach ($installed_plugins as $plugin_file => $plugin_data) {
+        $plugin_slug = dirname($plugin_file);
+        $installed_by_slug[$plugin_slug] = $plugin_data;
+    }
+
     foreach ($remote_plugins as $remote_plugin) {
-        // Buscar si el plugin está instalado
-        foreach ($installed_plugins as $plugin_file => $plugin_data) {
-            $plugin_slug = dirname($plugin_file);
+        // Verificar si el plugin está instalado usando lookup O(1)
+        if (isset($remote_plugin['slug']) && isset($installed_by_slug[$remote_plugin['slug']])) {
+            $plugin_data = $installed_by_slug[$remote_plugin['slug']];
             
-            // Comparar por slug o nombre
-            if (isset($remote_plugin['slug']) && $plugin_slug === $remote_plugin['slug']) {
-                // Comparar versiones
-                $installed_version = $plugin_data['Version'];
-                $remote_version = isset($remote_plugin['version']) ? $remote_plugin['version'] : '';
-                
-                if (!empty($remote_version) && version_compare($installed_version, $remote_version, '<')) {
-                    $count++;
-                }
-                break;
+            // Comparar versiones
+            $installed_version = $plugin_data['Version'];
+            $remote_version = isset($remote_plugin['version']) ? $remote_plugin['version'] : '';
+            
+            if (!empty($remote_version) && version_compare($installed_version, $remote_version, '<')) {
+                $count++;
             }
         }
     }

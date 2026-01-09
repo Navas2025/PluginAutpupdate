@@ -21,7 +21,7 @@ function plugin_updater_show_update_notice() {
     }
 
     // No mostrar en la propia página del plugin
-    if (isset($_GET['page']) && $_GET['page'] === 'client-plugin-updater') {
+    if (isset($_GET['page']) && sanitize_text_field($_GET['page']) === 'client-plugin-updater') {
         return;
     }
 
@@ -119,7 +119,8 @@ function plugin_updater_count_available_updates($remote_plugins) {
  */
 function plugin_updater_dismiss_notice_ajax() {
     // Verificar nonce
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'plugin_updater_dismiss_notice')) {
+    $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+    if (!wp_verify_nonce($nonce, 'plugin_updater_dismiss_notice')) {
         wp_send_json_error('Invalid nonce');
         return;
     }

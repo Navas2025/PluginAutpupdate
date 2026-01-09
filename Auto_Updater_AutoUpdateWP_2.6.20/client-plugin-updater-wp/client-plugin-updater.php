@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://actualizarplugins.online
- * @since             2.6.19
+ * @since             2.6.21
  * @package           Client_Plugin_Updater_AutoUpdateWP
  *
  * @wordpress-plugin
  * Plugin Name:       API Key AutoUpdate AutoUpdateWP
  * Plugin URI:        https://autoupdate-wp.online
  * Description:       Plugin para activar API Keys y gestionar actualizaciones de plugins y temas - de la web AutoUpdate-Wp
- * Version:           2.6.20
+ * Version:           2.6.21
  * Author:            Navas
  * Author URI:        https://autoupdate-wp.online
  * License:           GPL-2.0+
@@ -37,6 +37,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/update-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/theme-update-hooks.php';
 require_once plugin_dir_path(__FILE__) . 'includes/ajax-handler.php'; // Añadir esta
+require_once plugin_dir_path(__FILE__) . 'includes/admin-notices.php';
 
 /**
  * Modificar el nombre y el autor del plugin que se muestra en la lista de plugins.
@@ -187,3 +188,12 @@ function plugin_updater_update_remote_plugins_list() {
     }
 }
 add_action('admin_init', 'plugin_updater_update_remote_plugins_list');
+
+/**
+ * Limpiar el cron al desactivar el plugin
+ */
+function plugin_updater_deactivation_cleanup() {
+    wp_clear_scheduled_hook('plugin_updater_cron_check');
+    delete_transient('plugin_updater_notice_dismissed');
+}
+register_deactivation_hook(__FILE__, 'plugin_updater_deactivation_cleanup');
